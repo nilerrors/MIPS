@@ -34,11 +34,23 @@ translate_coordinates:
     # formula to calculate the address for the given index:
     # $gp + ($a0 * WIDTH_IN_PIXELS + $a1) * PIXEL_SIZE_IN_BYTES
     
-    li $t0, WIDTH_IN_PIXELS        # $t0 = 32
-    mul $t0, $a0, $t0              # $t0 = $a0 * $t0
-    add $t0, $t0, $a1              # $t0 = $t0 + $a0
-    mul $t0, $t0, PIXEL_SIZE_IN_BYTES        # $t0 = $t0 * PIXEL_SIZE_IN_BYTES
-    add $t0, $t0, $gp              # $t0 = $t0 + $gp
     
-    move $v0, $t0        # return value
+    sw $fp, 0($sp)            # previous frame-pointer in stack
+    move $fp, $sp             # current frame-pointer points to (current) top of the stack
+    subu $sp, $sp, 8          # reserve place for 4 bytes; only $s0
+    sw $s0, -4($fp)           # store $s0; address
+    
+    li $s0, WIDTH_IN_PIXELS        # $s0 = 32
+    mul $s0, $a0, $s0              # $s0 = $a0 * $s0
+    add $s0, $s0, $a1              # $s0 = $s0 + $a0
+    mul $s0, $s0, PIXEL_SIZE_IN_BYTES        # $s0 = $s0 * PIXEL_SIZE_IN_BYTES
+    add $s0, $s0, $gp              # $s0 = $s0 + $gp
+    
+    move $v0, $s0        # return value
+    
+    # restore previous values
+    lw $s0, -4($fp)
+    move $sp, $fp
+    lw $fp, 0($sp)
+    
     jr $ra

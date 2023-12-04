@@ -14,7 +14,7 @@ not_found_char_text: .asciiz "Unknown input! Valid inputs: z s q d x"
 
 
     .text
-main:
+test_print_direction:
     la $t0, newline
 
 print_direction:

@@ -6,7 +6,7 @@ buffer: .space 2048
 
 
     .text
-main:
+print_file:
 #### file descriptor
     li $v0, 13        # open file
     la $a0, fin       # with file name

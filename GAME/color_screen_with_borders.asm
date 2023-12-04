@@ -58,7 +58,7 @@ end:
 color_by_coordinates:
     sw $fp, 0($sp)        # store previous frame-poiner
     move $fp, $sp         # frame pointer points to current stack pointer value
-    subu $sp, $sp, 4      # create place for 4 bytes; only the return address
+    subu $sp, $sp, 8      # create place for 4 bytes; only the return address
     sw $ra, -4($fp)       # store value of return address
     
     jal translate_coordinates        # arguments already in $a0, $a1; PIXEL address in $v0
@@ -68,4 +68,5 @@ color_by_coordinates:
     lw $ra, -4($fp)       # restore return address
     move $sp, $fp         # restore previous stack pointer
     lw $fp, 0($sp)        # restore previous frame pointer
+    
     jr $ra
